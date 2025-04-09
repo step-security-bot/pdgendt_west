@@ -35,6 +35,8 @@ main()
     git clone -q "$WEST" "$WEST_TESTDIR" || die "failed to clone west to $WEST_TESTDIR in container"
     cd "$WEST_TESTDIR"
 
+    pip install --break-system-packages --require-hashes -r requirements-tox.txt
+
     echo "running tox, output in $TOX_LOG_IN_HOST in host"
     tox run >"$TOX_LOG" 2>&1 || die "tox failed, see $TOX_LOG"
 
