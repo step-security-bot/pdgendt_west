@@ -11,3 +11,18 @@ updates:
       actions-deps:
         patterns:
           - "*"
+
+  - package-ecosystem: docker
+    directory: /docker-testing/arch
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /docker-testing/debian
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /docker-testing/fedora
+    schedule:
+      interval: daily
