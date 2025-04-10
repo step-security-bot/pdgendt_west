@@ -1,0 +1,39 @@
+name: "Setup Python with requirements file"
+description: "Set up a specific vesrion of Python and install packages from requirement files"
+
+inputs:
+  ref:
+    description: >
+      The branch, tag or SHA to checkout from. This is passed to the checkout action.
+    required: true
+  python-version:
+    description: >
+      Python version to install, this is passed to the setup-python action.
+    required: true
+  requirements-file:
+    description: >
+      The Python requirements files to fetch and install using pip.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout requirement files
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        ref: main
+        sparse-checkout: ${{ inputs.requirements-file }}
+        sparse-checkout-cone-mode: false
+
+    - name: Set up Python
+      uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
+      with:
+        python-version: ${{ inputs.python-version }}
+        # Specify a pip cache for faster installs
+        cache: pip
+        cache-dependency-path: ${{ inputs.requirements-file }}
+
+    - name: Install Python dependencies
+      shell: bash
+      run: |
+        pip install -r ${{ inputs.requirements-file }} --require-hashes
